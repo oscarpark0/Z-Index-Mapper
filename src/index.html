@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Index Visualization</title>
+    <title>Z-Index Mapper</title>
     <style>
         /* Global Styles */
         body {
@@ -273,11 +273,45 @@
         .z-level[data-range="high"] {
             border-color: #e74c3c;
         }
+
+        /* Directory Input */
+        .directory-input {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #directoryInput {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+
+        #setDirectoryButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #setDirectoryButton:hover {
+            background-color: #2980b9;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Z-Index Visualization</h1>
+    <h1>Z-Index Mapper</h1>
+    <div class="directory-input">
+        <input type="text" id="directoryInput" placeholder="Enter directory path">
+        <button id="setDirectoryButton">Set Directory</button>
+    </div>
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search for z-index, file, or component...">
         <button id="searchButton">Search</button>
@@ -344,6 +378,7 @@
         let currentPage = 1;
         const itemsPerPage = 20;
         let chart = null;
+        let currentDirectory = '';
 
         // WebSocket setup
         const ws = new WebSocket("ws://localhost:8080/ws");
@@ -351,7 +386,6 @@
 
         ws.onopen = function () {
             console.log("WebSocket connection established");
-            refreshData();
         };
 
         ws.onmessage = function (event) {
@@ -574,8 +608,23 @@
         // Refresh data function
         function refreshData() {
             if (ws.readyState === WebSocket.OPEN) {
-                ws.send('refresh');
+                if (!currentDirectory) {
+                    alert("Please set a directory first.");
+                    return;
+                }
+                ws.send(JSON.stringify({ action: 'refresh', directory: currentDirectory }));
                 loadingIndicator.style.display = 'block';
+            }
+        }
+
+        // Add setDirectory function
+        function setDirectory() {
+            const directoryInput = document.getElementById('directoryInput');
+            currentDirectory = directoryInput.value.trim();
+            if (currentDirectory) {
+                alert(`Directory set to: ${currentDirectory}`);
+            } else {
+                alert("Please enter a valid directory path.");
             }
         }
 
@@ -688,6 +737,7 @@
 
         // Event Listeners
         document.getElementById('refreshButton').addEventListener('click', refreshData);
+        document.getElementById('setDirectoryButton').addEventListener('click', setDirectory);
         document.getElementById('searchButton').addEventListener('click', performSearch);
         document.getElementById('searchInput').addEventListener('keyup', function (event) {
             if (event.key === 'Enter') {
