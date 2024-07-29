@@ -27,7 +27,7 @@ Z-Index Mapper is a powerful web-based tool designed to help developers visualiz
 **Installation**
 --------------
 
-1. Ensure you have Rust and Cargo installed on your system. If not, follow the official Rust installation guide.
+1. Ensure you have Rust and Cargo installed on your system. If not, follow the official Rust installation guide (https://www.rust-lang.org/tools/install).
 2. Clone the repository:
 ```bash
 git clone https://github.com/your-username/Z-Index-Mapper.git
