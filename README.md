@@ -63,3 +63,9 @@ cargo run
 
 * `src/main.rs`: Contains the Rust backend code, including WebSocket handling, file scanning logic, and HTTP server setup.
 * `src/index.html`: The single-page frontend application, including HTML structure, CSS styles, and JavaScript for interactivity and data management.
+
+**Screenshot**
+--------------
+
+![image](https://github.com/user-attachments/assets/43ed064a-67be-4c40-8ad0-44f2a5cd9dd3)
+
