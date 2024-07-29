@@ -8,77 +8,98 @@
     <style>
         /* Global Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
         }
 
         h1 {
             color: #2c3e50;
             text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
         }
 
         /* Button Styles */
-        #refreshButton {
-            display: block;
-            margin: 20px auto;
+        .btn {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #3498db;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
         }
 
-        #refreshButton:hover {
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+        }
+
+        .btn-primary:hover {
             background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #2ecc71;
+        }
+
+        .btn-secondary:hover {
+            background-color: #27ae60;
         }
 
         /* Container and Z-Level Styles */
         .container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-
-        .z-level {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .z-index {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            gap: 20px;
         }
 
         /* Component Styles */
-        .occurrences {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
         }
 
-        .component {
-            background-color: #3498db;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .component-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .component:hover {
-            background-color: #2980b9;
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .component-card .z-index {
+            font-weight: bold;
+            color: #3498db;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .component-card .file-path {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+
+        .component-card .line-number {
+            font-size: 0.8em;
+            color: #95a5a6;
         }
 
         /* Loading Indicator */
@@ -87,47 +108,43 @@
             font-style: italic;
             color: #666;
             margin-top: 20px;
+            font-size: 1.2em;
         }
 
-        /* Updated styles for the component viewer */
+        /* Component Viewer */
         #componentViewer {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 80%;
-            max-height: 80%;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            max-height: 90%;
             overflow: auto;
             display: none;
             width: auto;
             height: auto;
             font-size: 14px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
+            z-index: 1000;
         }
 
         #componentViewer pre {
             margin: 0;
-            padding: 10px;
-            border-radius: 4px;
-            background-color: #f8f8f8;
-            border: 1px solid #e0e0e0;
-            max-height: 300px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            max-height: 400px;
             overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
         }
 
         #componentViewer code {
             font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 13px;
-            line-height: 1.4;
-            -webkit-font-smoothing: auto;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         .highlight-line {
@@ -138,10 +155,10 @@
 
         #closeViewer {
             position: absolute;
-            top: 5px;
-            right: 10px;
+            top: 10px;
+            right: 15px;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 24px;
             color: #666;
             transition: color 0.3s;
         }
@@ -151,214 +168,201 @@
         }
 
         #componentHeader {
-            margin-bottom: 10px;
-            font-size: 14px;
+            margin-bottom: 15px;
+            font-size: 16px;
             font-weight: bold;
             color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
-        /* Search styles */
-        .search-container {
+        /* Search and Controls */
+        .controls-section {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-container, .controls-container {
             display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        #searchInput {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px 0 0 5px;
-        }
-
-        #searchButton {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #searchButton:hover {
-            background-color: #2980b9;
-        }
-
-        .highlight {
-            background-color: yellow;
-        }
-
-        /* Controls Container */
-        .controls-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
             flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .grouping-container,
-        .filtering-container {
-            margin: 10px 0;
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .control-group select, .control-group input[type="text"], .control-group input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
         /* Visualization */
         .visualization-container {
-            width: 100%;
-            height: 300px;
-            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .controls-container {
+            .search-container, .controls-container {
                 flex-direction: column;
             }
 
-            .grouping-container,
-            .filtering-container {
+            .control-group {
                 width: 100%;
             }
 
-            #searchInput {
-                width: 100%;
+            .grid-container {
+                grid-template-columns: 1fr;
             }
-
-            .visualization-container {
-                height: 200px;
-            }
-        }
-
-        /* Pagination */
-        #paginationControls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        #paginationControls button {
-            margin: 0 10px;
-            padding: 5px 10px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        #paginationControls button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
         }
 
         /* Color coding for z-index ranges */
-        .z-level {
-            border-left: 5px solid;
+        .component-card[data-range="low"] {
+            border-left: 5px solid #2ecc71;
         }
 
-        .z-level[data-range="low"] {
-            border-color: #2ecc71;
+        .component-card[data-range="medium"] {
+            border-left: 5px solid #f39c12;
         }
 
-        .z-level[data-range="medium"] {
-            border-color: #f39c12;
+        .component-card[data-range="high"] {
+            border-left: 5px solid #e74c3c;
         }
 
-        .z-level[data-range="high"] {
-            border-color: #e74c3c;
-        }
-
-        /* Directory Input */
-        .directory-input {
+        /* File Group Styles */
+        .file-group-container {
             display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 30px;
         }
 
-        #directoryInput {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px 0 0 5px;
+        .file-group {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
 
-        #setDirectoryButton {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .file-header {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
         }
 
-        #setDirectoryButton:hover {
-            background-color: #2980b9;
+        .components-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        /* Adjust component card styles for file grouping */
+        .file-group .component-card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-group .component-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .file-group .component-card .file-path {
+            display: none; /* Hide file path in card when grouped by file */
         }
     </style>
 </head>
 
 <body>
     <h1>Z-Index Mapper</h1>
-    <div class="directory-input">
-        <input type="text" id="directoryInput" placeholder="Enter directory path">
-        <button id="setDirectoryButton">Set Directory</button>
-    </div>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for z-index, file, or component...">
-        <button id="searchButton">Search</button>
-    </div>
-    <div class="controls-container">
-        <div class="grouping-container">
-            <label for="groupingSelect">Group by:</label>
-            <select id="groupingSelect">
-                <option value="zIndex">Z-Index</option>
-                <option value="file">File</option>
-            </select>
+
+    <div class="controls-section">
+        <div class="directory-input control-group">
+            <label for="directoryInput">Directory Path:</label>
+            <div style="display: flex;">
+                <input type="text" id="directoryInput" placeholder="Enter directory path">
+                <button id="setDirectoryButton" class="btn btn-primary">Set</button>
+            </div>
         </div>
-        <div class="sorting-container">
-            <label for="sortSelect">Sort by:</label>
-            <select id="sortSelect">
-                <option value="zIndex">Z-Index</option>
-                <option value="file">File</option>
-            </select>
-            <select id="sortOrder">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-            </select>
+
+        <div class="search-container">
+            <div class="control-group" style="flex-grow: 1;">
+                <label for="searchInput">Search:</label>
+                <input type="text" id="searchInput" placeholder="Search for z-index, file, or component...">
+            </div>
+            <button id="searchButton" class="btn btn-primary">Search</button>
         </div>
-        <div class="filtering-container">
-            <label for="minZIndex">Min Z-Index:</label>
-            <input type="number" id="minZIndex" value="-1">
-            <label for="maxZIndex">Max Z-Index:</label>
-            <input type="number" id="maxZIndex" value="999999999">
-            <label for="fileTypeFilter">File Type:</label>
-            <input type="text" id="fileTypeFilter" placeholder="e.g., js,tsx">
+
+        <div class="controls-container">
+            <div class="control-group">
+                <label for="groupingSelect">Group by:</label>
+                <select id="groupingSelect">
+                    <option value="zIndex">Z-Index</option>
+                    <option value="file">File</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="sortSelect">Sort by:</label>
+                <select id="sortSelect">
+                    <option value="zIndex">Z-Index</option>
+                    <option value="file">File</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="sortOrder">Sort Order:</label>
+                <select id="sortOrder">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="minZIndex">Min Z-Index:</label>
+                <input type="number" id="minZIndex" value="-1">
+            </div>
+            <div class="control-group">
+                <label for="maxZIndex">Max Z-Index:</label>
+                <input type="number" id="maxZIndex" value="999999999">
+            </div>
+            <div class="control-group">
+                <label for="fileTypeFilter">File Type:</label>
+                <input type="text" id="fileTypeFilter" placeholder="e.g., js,tsx">
+            </div>
         </div>
-    </div>
-    <button id="refreshButton">Refresh Data</button>
-    <div id="loadingIndicator" style="display: none;">Loading...</div>
-    <div class="visualization-container">
-        <canvas id="zIndexChart"></canvas>
-    </div>
-    <div class="container" id="zIndexContainer">
-        <!-- Z-Index levels will be dynamically inserted here -->
-    </div>
-    <div id="paginationControls">
-        <button id="prevPage">Previous</button>
-        <span id="pageInfo"></span>
-        <button id="nextPage">Next</button>
+
+        <button id="refreshButton" class="btn btn-secondary">Refresh Data</button>
     </div>
 
-    <!-- Add this new div for the component viewer -->
+    <div id="loadingIndicator" style="display: none;">Loading...</div>
+
+    <div class="visualization-container">
+        <button id="toggleChartButton" class="btn btn-primary">Toggle Chart</button>
+        <div id="visualizationContainer">
+            <canvas id="zIndexChart"></canvas>
+        </div>
+    </div>
+
+    <div class="container" id="zIndexContainer">
+        <!-- Z-Index levels or file groups will be dynamically inserted here -->
+    </div>
+
     <div id="componentViewer">
         <span id="closeViewer">&times;</span>
         <div id="componentHeader"></div>
@@ -379,6 +383,7 @@
         const itemsPerPage = 20;
         let chart = null;
         let currentDirectory = '';
+        let isChartVisible = true;
 
         // WebSocket setup
         const ws = new WebSocket("ws://localhost:8080/ws");
@@ -419,7 +424,7 @@
             const filteredData = filterData(groupedData, minZIndex, maxZIndex, fileTypeFilter);
             const sortedData = sortData(filteredData, sortBy, sortOrder);
 
-            renderPaginatedData(sortedData);
+            renderAllComponents(sortedData);
             updateVisualization(sortedData);
         }
 
@@ -470,50 +475,73 @@
             return Object.fromEntries(sortedEntries);
         }
 
-        function renderPaginatedData(data) {
+        function renderAllComponents(data) {
             const container = document.getElementById("zIndexContainer");
             container.innerHTML = '';
-
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const paginatedData = Object.entries(data).slice(startIndex, endIndex);
-
-            paginatedData.forEach(([key, zIndexes]) => {
-                const groupDiv = document.createElement('div');
-                groupDiv.className = 'group';
-                groupDiv.innerHTML = `<h3>${key}</h3>`;
-
-                Object.entries(zIndexes).sort((a, b) => b[0] - a[0]).forEach(([zIndex, entry]) => {
-                    const zLevelDiv = createZLevelElement(zIndex, entry);
-                    groupDiv.appendChild(zLevelDiv);
+            
+            const grouping = document.getElementById("groupingSelect").value;
+            
+            if (grouping === 'file') {
+                container.className = 'file-group-container';
+                Object.entries(data).forEach(([filePath, zIndexes]) => {
+                    const fileGroup = document.createElement('div');
+                    fileGroup.className = 'file-group';
+                    
+                    const fileHeader = document.createElement('div');
+                    fileHeader.className = 'file-header';
+                    fileHeader.textContent = filePath;
+                    fileGroup.appendChild(fileHeader);
+                    
+                    const componentsContainer = document.createElement('div');
+                    componentsContainer.className = 'components-container';
+                    
+                    Object.entries(zIndexes).forEach(([zIndex, entry]) => {
+                        entry.occurrences.forEach(([_, lineNumber]) => {
+                            const card = createComponentCard(zIndex, filePath, lineNumber);
+                            componentsContainer.appendChild(card);
+                        });
+                    });
+                    
+                    fileGroup.appendChild(componentsContainer);
+                    container.appendChild(fileGroup);
                 });
-
-                container.appendChild(groupDiv);
-            });
-
-            updatePaginationControls(Object.keys(data).length);
+            } else {
+                container.className = 'grid-container';
+                Object.entries(data).forEach(([key, zIndexes]) => {
+                    Object.entries(zIndexes).forEach(([zIndex, entry]) => {
+                        entry.occurrences.forEach(([filePath, lineNumber]) => {
+                            const card = createComponentCard(zIndex, filePath, lineNumber);
+                            container.appendChild(card);
+                        });
+                    });
+                });
+            }
         }
 
-        function createZLevelElement(zIndex, entry) {
-            const zLevelDiv = document.createElement('div');
-            zLevelDiv.className = 'z-level';
-            zLevelDiv.setAttribute('data-range', getZIndexRange(zIndex));
+        function createComponentCard(zIndex, filePath, lineNumber) {
+            const card = document.createElement('div');
+            card.className = 'component-card';
+            card.setAttribute('data-range', getZIndexRange(zIndex));
 
-            const zIndexSpan = document.createElement('div');
-            zIndexSpan.className = 'z-index';
-            zIndexSpan.textContent = `z-index: ${zIndex}`;
-            zLevelDiv.appendChild(zIndexSpan);
+            const zIndexDiv = document.createElement('div');
+            zIndexDiv.className = 'z-index';
+            zIndexDiv.textContent = `z-index: ${zIndex}`;
 
-            const occurrencesDiv = document.createElement('div');
-            occurrencesDiv.className = 'occurrences';
+            const filePathDiv = document.createElement('div');
+            filePathDiv.className = 'file-path';
+            filePathDiv.textContent = filePath;
 
-            entry.occurrences.forEach(([filePath, lineNumber]) => {
-                const componentDiv = createComponentElement(filePath, lineNumber);
-                occurrencesDiv.appendChild(componentDiv);
-            });
+            const lineNumberDiv = document.createElement('div');
+            lineNumberDiv.className = 'line-number';
+            lineNumberDiv.textContent = `Line: ${lineNumber}`;
 
-            zLevelDiv.appendChild(occurrencesDiv);
-            return zLevelDiv;
+            card.appendChild(zIndexDiv);
+            card.appendChild(filePathDiv);
+            card.appendChild(lineNumberDiv);
+
+            card.addEventListener('click', () => renderComponent(filePath, lineNumber));
+
+            return card;
         }
 
         function getZIndexRange(zIndex) {
@@ -523,27 +551,9 @@
             return 'high';
         }
 
-        function createComponentElement(filePath, lineNumber) {
-            const componentDiv = document.createElement('div');
-            componentDiv.className = 'component';
-
-            const srcIndex = filePath.indexOf('src');
-            const displayPath = srcIndex !== -1 ? filePath.slice(srcIndex) : filePath;
-
-            componentDiv.textContent = `${displayPath}:${lineNumber}`;
-            componentDiv.title = `${filePath}:${lineNumber}`;
-            componentDiv.addEventListener('click', () => renderComponent(filePath, lineNumber));
-            return componentDiv;
-        }
-
-        function updatePaginationControls(totalItems) {
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = currentPage === totalPages;
-            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-        }
-
         function updateVisualization(data) {
+            if (!isChartVisible) return; // Don't update if the chart is hidden
+
             const ctx = document.getElementById('zIndexChart').getContext('2d');
 
             if (chart) {
@@ -617,12 +627,17 @@
             }
         }
 
-        // Add setDirectory function
+        // Update the setDirectory function
         function setDirectory() {
             const directoryInput = document.getElementById('directoryInput');
             currentDirectory = directoryInput.value.trim();
             if (currentDirectory) {
-                alert(`Directory set to: ${currentDirectory}`);
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ action: 'setDirectory', directory: currentDirectory }));
+                    loadingIndicator.style.display = 'block';
+                } else {
+                    alert("WebSocket connection is not open. Please refresh the page and try again.");
+                }
             } else {
                 alert("Please enter a valid directory path.");
             }
@@ -692,30 +707,26 @@
         function performSearch() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const container = document.getElementById('zIndexContainer');
-            const zLevels = container.getElementsByClassName('z-level');
+            const componentCards = container.getElementsByClassName('component-card');
 
-            for (const zLevel of zLevels) {
-                const zIndex = zLevel.querySelector('.z-index').textContent.toLowerCase();
-                const components = zLevel.getElementsByClassName('component');
-                let shouldShow = false;
+            for (const card of componentCards) {
+                const zIndex = card.querySelector('.z-index').textContent.toLowerCase();
+                const filePath = card.querySelector('.file-path').textContent.toLowerCase();
+                const lineNumber = card.querySelector('.line-number').textContent.toLowerCase();
 
-                if (zIndex.includes(searchTerm)) {
-                    shouldShow = true;
-                    highlightText(zLevel.querySelector('.z-index'), searchTerm);
+                const shouldShow = zIndex.includes(searchTerm) || filePath.includes(searchTerm) || lineNumber.includes(searchTerm);
+
+                card.style.display = shouldShow ? '' : 'none';
+
+                if (shouldShow) {
+                    highlightText(card.querySelector('.z-index'), searchTerm);
+                    highlightText(card.querySelector('.file-path'), searchTerm);
+                    highlightText(card.querySelector('.line-number'), searchTerm);
                 } else {
-                    removeHighlight(zLevel.querySelector('.z-index'));
+                    removeHighlight(card.querySelector('.z-index'));
+                    removeHighlight(card.querySelector('.file-path'));
+                    removeHighlight(card.querySelector('.line-number'));
                 }
-
-                for (const component of components) {
-                    if (component.textContent.toLowerCase().includes(searchTerm)) {
-                        shouldShow = true;
-                        highlightText(component, searchTerm);
-                    } else {
-                        removeHighlight(component);
-                    }
-                }
-
-                zLevel.style.display = shouldShow ? '' : 'none';
             }
         }
 
@@ -735,6 +746,29 @@
             element.innerHTML = element.innerHTML.replace(/<span class='highlight'>/g, '').replace(/<\/span>/g, '');
         }
 
+        function toggleChart() {
+            const visualizationContainer = document.getElementById('visualizationContainer');
+            const toggleChartButton = document.getElementById('toggleChartButton');
+            
+            if (isChartVisible) {
+                visualizationContainer.style.display = 'none';
+                toggleChartButton.textContent = 'Show Chart';
+            } else {
+                visualizationContainer.style.display = 'block';
+                toggleChartButton.textContent = 'Hide Chart';
+                // Redraw the chart when showing it again
+                updateVisualization(groupedData);
+            }
+            
+            isChartVisible = !isChartVisible;
+        }
+
+        // Add this function to close the component viewer
+        function closeComponentViewer() {
+            const viewer = document.getElementById('componentViewer');
+            viewer.style.display = 'none';
+        }
+
         // Event Listeners
         document.getElementById('refreshButton').addEventListener('click', refreshData);
         document.getElementById('setDirectoryButton').addEventListener('click', setDirectory);
@@ -750,23 +784,15 @@
         document.getElementById('fileTypeFilter').addEventListener('change', updateDisplay);
         document.getElementById('sortSelect').addEventListener('change', updateDisplay);
         document.getElementById('sortOrder').addEventListener('change', updateDisplay);
-        document.getElementById('prevPage').addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                updateDisplay();
+        document.getElementById('toggleChartButton').addEventListener('click', toggleChart);
+        document.getElementById('closeViewer').addEventListener('click', closeComponentViewer);
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeComponentViewer();
             }
-        });
-        document.getElementById('nextPage').addEventListener('click', () => {
-            const totalPages = Math.ceil(Object.keys(groupedData).length / itemsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateDisplay();
-            }
-        });
-        document.getElementById('closeViewer').addEventListener('click', () => {
-            document.getElementById('componentViewer').style.display = 'none';
         });
     </script>
+
 </body>
 
 </html>

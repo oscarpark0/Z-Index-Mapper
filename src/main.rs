@@ -9,9 +9,9 @@ use serde::Serialize;
 use serde_json;
 use std::time::Duration;
 use notify::{Watcher, RecursiveMode, watcher, DebouncedEvent};
-use std::sync::mpsc::channel;
 use std::path::PathBuf;
 use std::fs;
+use std::sync::mpsc::channel;
 
 #[derive(Debug, Serialize, Clone)]
 struct ZIndexEntry {
@@ -41,15 +41,23 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
                 let message: serde_json::Value = serde_json::from_str(&text).unwrap_or_default();
                 if let Some(action) = message.get("action") {
                     match action.as_str() {
-                        Some("refresh") => {
+                        Some("refresh") | Some("setDirectory") => {
                             if let Some(directory) = message.get("directory") {
                                 if let Some(dir_str) = directory.as_str() {
                                     let mut scan_path = self.scan_path.write().unwrap();
                                     *scan_path = PathBuf::from(dir_str);
                                     drop(scan_path);  // Release the write lock
 
+                                    // Set up the watcher for the new directory
+                                    let (tx, _rx) = channel();
+                                    if let Ok(mut watcher) = watcher(tx, Duration::from_secs(2)) {
+                                        if let Err(e) = watcher.watch(dir_str, RecursiveMode::Recursive) {
+                                            println!("Error setting up watcher: {:?}", e);
+                                        }
+                                    }
+
                                     let mut data = self.data.write().unwrap();
-                                    *data = scan_files(&*self.scan_path.read().unwrap());
+                                    *data = scan_files(&PathBuf::from(dir_str));
                                     drop(data);  // Release the write lock
                                 }
                             }
@@ -112,35 +120,25 @@ struct ComponentData {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let data = Arc::new(RwLock::new(BTreeMap::<i64, ZIndexEntry>::new()));
-    let scan_path = Arc::new(RwLock::new(PathBuf::from(r"C:\Users\tb\Desktop\tarotmancer-frontend")));
+    let scan_path = Arc::new(RwLock::new(PathBuf::new())); // Initialize with an empty PathBuf
 
-    let (tx, rx) = channel();
-    let mut watcher = watcher(tx, Duration::from_secs(2)).unwrap();
+    let (tx, _rx) = channel();
+    let _watcher = watcher(tx, Duration::from_secs(2)).unwrap();
     
-    // Dereference the RwLockReadGuard
-    watcher.watch(&*scan_path.read().unwrap(), RecursiveMode::Recursive).unwrap();
-
-    for dir in &["node_modules", "build", ".git"] {
-        let path = scan_path.read().unwrap().join(dir);
-        if path.exists() {
-            match watcher.watch(&path, RecursiveMode::Recursive) {
-                Ok(_) => println!("Warning: {} is being watched. This may slow down the scanning process.", dir),
-                Err(_) => println!("Successfully excluded {} from watching.", dir),
-            }
-        }
-    }
-
     let data_clone = data.clone();
     let scan_path_clone = scan_path.clone();
 
     std::thread::spawn(move || {
         loop {
-            match rx.recv() {
+            match _rx.recv() {
                 Ok(event) => {
                     match event {
                         DebouncedEvent::Create(_) | DebouncedEvent::Write(_) | DebouncedEvent::Remove(_) | DebouncedEvent::Rename(_, _) => {
-                            let mut map = data_clone.write().unwrap();
-                            *map = scan_files(&*scan_path_clone.read().unwrap());
+                            let scan_path = scan_path_clone.read().unwrap();
+                            if !scan_path.as_os_str().is_empty() {
+                                let mut map = data_clone.write().unwrap();
+                                *map = scan_files(&scan_path);
+                            }
                         }
                         _ => (), // Ignore other events
                     }
@@ -151,9 +149,10 @@ async fn main() -> std::io::Result<()> {
         }
     });
 
-    let mut initial_data = data.write().unwrap();
-    *initial_data = scan_files(&*scan_path.read().unwrap());
-    drop(initial_data);  // Release the write lock
+    // Remove or comment out this initial scan
+    // let mut initial_data = data.write().unwrap();
+    // *initial_data = scan_files(&*scan_path.read().unwrap());
+    // drop(initial_data);  // Release the write lock
 
     let app_data = web::Data::new(data.clone());
     let app_scan_path = web::Data::new(scan_path.clone());
