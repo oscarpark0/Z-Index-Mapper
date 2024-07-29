@@ -1,0 +1,258 @@
+Z-Index Summary Report
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\FeedbackButton.module.css
+Line: 60
+Z-Index: 10000000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\FeedbackButton.module.css
+Line: 45
+Z-Index: 9999999
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 25
+Z-Index: 9999100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 51
+Z-Index: 9999100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 244
+Z-Index: 9999100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 320
+Z-Index: 9999100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 330
+Z-Index: 9999100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 176
+Z-Index: 9999099
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 303
+Z-Index: 9992100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\App.css
+Line: 244
+Z-Index: 1000000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 21
+Z-Index: 9999
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 126
+Z-Index: 9999
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 34
+Z-Index: 2101
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 278
+Z-Index: 2100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 16
+Z-Index: 2000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 116
+Z-Index: 2000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 27
+Z-Index: 2000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 28
+Z-Index: 2000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 29
+Z-Index: 2000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CommandTerminal.css
+Line: 270
+Z-Index: 2000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 30
+Z-Index: 1999
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 183
+Z-Index: 1900
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 47
+Z-Index: 1100
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 108
+Z-Index: 1001
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\App.css
+Line: 198
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 6
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 310
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CommandTerminal.css
+Line: 6
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\PastDrawsModal.module.css
+Line: 11
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 18
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\SubscribeButton.module.css
+Line: 28
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\TarotCaptcha.module.css
+Line: 10
+Z-Index: 1000
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\TarotCaptcha.module.css
+Line: 66
+Z-Index: 999
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 104
+Z-Index: 90
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 40
+Z-Index: 12
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\App.js
+Line: 219
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 39
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 41
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 42
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 43
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 44
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 45
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 46
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 47
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 48
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Footer.module.css
+Line: 13
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 122
+Z-Index: 10
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CommandTerminal.css
+Line: 35
+Z-Index: 9
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 75
+Z-Index: 9
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 212
+Z-Index: 9
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 8
+Z-Index: 8
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\App.js
+Line: 261
+Z-Index: 5
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 155
+Z-Index: 5
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Robot.css
+Line: 171
+Z-Index: 3
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 100
+Z-Index: 2
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CommandTerminal.css
+Line: 56
+Z-Index: 2
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\App.js
+Line: 222
+Z-Index: 1
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\CelticSpread.jsx
+Line: 256
+Z-Index: 1
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.css
+Line: 212
+Z-Index: 1
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\CardReveal.jsx
+Line: 118
+Z-Index: 1
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Footer.module.css
+Line: 69
+Z-Index: 1
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\ThreeCardSpread.jsx
+Line: 281
+Z-Index: 1
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\components\Footer.module.css
+Line: 64
+Z-Index: 0
+
+File: C:\Users\tb\Desktop\tarotmancer-frontend\src\App.css
+Line: 5
+Z-Index: -1000
+

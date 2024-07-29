@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Z-Index Visualization</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { display: flex; flex-direction: column-reverse; align-items: start; }
+        .z-level { display: flex; align-items: center; margin-bottom: 5px; }
+        .z-level span { margin-right: 10px; width: 150px; text-align: right; }
+        .component { background-color: #4CAF50; color: white; padding: 5px; border-radius: 5px; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Z-Index Visualization</h1>
+    <div class="container">    <div class="z-level"><span>z-index: 10000000</span>
+        <div class="component">FeedbackButton.module.css:60</div>
+    </div>
+    <div class="z-level"><span>z-index: 9999999</span>
+        <div class="component">FeedbackButton.module.css:45</div>
+    </div>
+    <div class="z-level"><span>z-index: 9999100</span>
+        <div class="component">CardReveal.css:25</div>
+        <div class="component">CardReveal.css:51</div>
+        <div class="component">CardReveal.css:244</div>
+        <div class="component">CardReveal.css:320</div>
+        <div class="component">CardReveal.css:330</div>
+    </div>
+    <div class="z-level"><span>z-index: 9999099</span>
+        <div class="component">CardReveal.css:176</div>
+    </div>
+    <div class="z-level"><span>z-index: 9992100</span>
+        <div class="component">CardReveal.css:303</div>
+    </div>
+    <div class="z-level"><span>z-index: 1000000</span>
+        <div class="component">App.css:244</div>
+    </div>
+    <div class="z-level"><span>z-index: 9999</span>
+        <div class="component">CardReveal.css:21</div>
+        <div class="component">CardReveal.jsx:126</div>
+    </div>
+    <div class="z-level"><span>z-index: 2101</span>
+        <div class="component">CardReveal.css:34</div>
+    </div>
+    <div class="z-level"><span>z-index: 2100</span>
+        <div class="component">CardReveal.css:278</div>
+    </div>
+    <div class="z-level"><span>z-index: 2000</span>
+        <div class="component">CardReveal.css:16</div>
+        <div class="component">CardReveal.css:116</div>
+        <div class="component">CardReveal.jsx:27</div>
+        <div class="component">CardReveal.jsx:28</div>
+        <div class="component">CardReveal.jsx:29</div>
+        <div class="component">CommandTerminal.css:270</div>
+    </div>
+    <div class="z-level"><span>z-index: 1999</span>
+        <div class="component">CardReveal.css:30</div>
+    </div>
+    <div class="z-level"><span>z-index: 1900</span>
+        <div class="component">CardReveal.css:183</div>
+    </div>
+    <div class="z-level"><span>z-index: 1100</span>
+        <div class="component">Robot.css:47</div>
+    </div>
+    <div class="z-level"><span>z-index: 1001</span>
+        <div class="component">CardReveal.css:108</div>
+    </div>
+    <div class="z-level"><span>z-index: 1000</span>
+        <div class="component">App.css:198</div>
+        <div class="component">CardReveal.css:6</div>
+        <div class="component">CardReveal.css:310</div>
+        <div class="component">CommandTerminal.css:6</div>
+        <div class="component">PastDrawsModal.module.css:11</div>
+        <div class="component">Robot.css:18</div>
+        <div class="component">SubscribeButton.module.css:28</div>
+        <div class="component">TarotCaptcha.module.css:10</div>
+    </div>
+    <div class="z-level"><span>z-index: 999</span>
+        <div class="component">TarotCaptcha.module.css:66</div>
+    </div>
+    <div class="z-level"><span>z-index: 90</span>
+        <div class="component">CardReveal.css:104</div>
+    </div>
+    <div class="z-level"><span>z-index: 12</span>
+        <div class="component">CardReveal.jsx:40</div>
+    </div>
+    <div class="z-level"><span>z-index: 10</span>
+        <div class="component">App.js:219</div>
+        <div class="component">CardReveal.jsx:39</div>
+        <div class="component">CardReveal.jsx:41</div>
+        <div class="component">CardReveal.jsx:42</div>
+        <div class="component">CardReveal.jsx:43</div>
+        <div class="component">CardReveal.jsx:44</div>
+        <div class="component">CardReveal.jsx:45</div>
+        <div class="component">CardReveal.jsx:46</div>
+        <div class="component">CardReveal.jsx:47</div>
+        <div class="component">CardReveal.jsx:48</div>
+        <div class="component">Footer.module.css:13</div>
+        <div class="component">Robot.css:122</div>
+    </div>
+    <div class="z-level"><span>z-index: 9</span>
+        <div class="component">CommandTerminal.css:35</div>
+        <div class="component">Robot.css:75</div>
+        <div class="component">Robot.css:212</div>
+    </div>
+    <div class="z-level"><span>z-index: 8</span>
+        <div class="component">Robot.css:8</div>
+    </div>
+    <div class="z-level"><span>z-index: 5</span>
+        <div class="component">App.js:261</div>
+        <div class="component">Robot.css:155</div>
+    </div>
+    <div class="z-level"><span>z-index: 3</span>
+        <div class="component">Robot.css:171</div>
+    </div>
+    <div class="z-level"><span>z-index: 2</span>
+        <div class="component">CardReveal.css:100</div>
+        <div class="component">CommandTerminal.css:56</div>
+    </div>
+    <div class="z-level"><span>z-index: 1</span>
+        <div class="component">App.js:222</div>
+        <div class="component">CelticSpread.jsx:256</div>
+        <div class="component">CardReveal.css:212</div>
+        <div class="component">CardReveal.jsx:118</div>
+        <div class="component">Footer.module.css:69</div>
+        <div class="component">ThreeCardSpread.jsx:281</div>
+    </div>
+    <div class="z-level"><span>z-index: 0</span>
+        <div class="component">Footer.module.css:64</div>
+    </div>
+    <div class="z-level"><span>z-index: -1000</span>
+        <div class="component">App.css:5</div>
+    </div>
+    </div>
+</body>
+</html>

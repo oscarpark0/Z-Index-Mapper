@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-Index Visualization</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        /* Button Styles */
+        #refreshButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #refreshButton:hover {
+            background-color: #2980b9;
+        }
+
+        /* Container and Z-Level Styles */
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .z-level {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .z-index {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        /* Component Styles */
+        .occurrences {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .component {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .component:hover {
+            background-color: #2980b9;
+        }
+
+        /* Loading Indicator */
+        #loadingIndicator {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        /* Updated styles for the component viewer */
+        #componentViewer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+            max-height: 80%;
+            overflow: auto;
+            display: none;
+            width: auto;
+            height: auto;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        #componentViewer pre {
+            margin: 0;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        #componentViewer code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            -webkit-font-smoothing: auto;
+        }
+
+        .highlight-line {
+            background-color: #fffacd;
+            display: inline-block;
+            width: 100%;
+        }
+
+        #closeViewer {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        #closeViewer:hover {
+            color: #333;
+        }
+
+        #componentHeader {
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Search styles */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+
+        #searchButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #searchButton:hover {
+            background-color: #2980b9;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        /* Controls Container */
+        .controls-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .grouping-container,
+        .filtering-container {
+            margin: 10px 0;
+        }
+
+        /* Visualization */
+        .visualization-container {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .controls-container {
+                flex-direction: column;
+            }
+
+            .grouping-container,
+            .filtering-container {
+                width: 100%;
+            }
+
+            #searchInput {
+                width: 100%;
+            }
+
+            .visualization-container {
+                height: 200px;
+            }
+        }
+
+        /* Pagination */
+        #paginationControls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #paginationControls button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #paginationControls button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Color coding for z-index ranges */
+        .z-level {
+            border-left: 5px solid;
+        }
+
+        .z-level[data-range="low"] {
+            border-color: #2ecc71;
+        }
+
+        .z-level[data-range="medium"] {
+            border-color: #f39c12;
+        }
+
+        .z-level[data-range="high"] {
+            border-color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Z-Index Visualization</h1>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for z-index, file, or component...">
+        <button id="searchButton">Search</button>
+    </div>
+    <div class="controls-container">
+        <div class="grouping-container">
+            <label for="groupingSelect">Group by:</label>
+            <select id="groupingSelect">
+                <option value="zIndex">Z-Index</option>
+                <option value="file">File</option>
+            </select>
+        </div>
+        <div class="sorting-container">
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect">
+                <option value="zIndex">Z-Index</option>
+                <option value="file">File</option>
+            </select>
+            <select id="sortOrder">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </div>
+        <div class="filtering-container">
+            <label for="minZIndex">Min Z-Index:</label>
+            <input type="number" id="minZIndex" value="-1">
+            <label for="maxZIndex">Max Z-Index:</label>
+            <input type="number" id="maxZIndex" value="999999999">
+            <label for="fileTypeFilter">File Type:</label>
+            <input type="text" id="fileTypeFilter" placeholder="e.g., js,tsx">
+        </div>
+    </div>
+    <button id="refreshButton">Refresh Data</button>
+    <div id="loadingIndicator" style="display: none;">Loading...</div>
+    <div class="visualization-container">
+        <canvas id="zIndexChart"></canvas>
+    </div>
+    <div class="container" id="zIndexContainer">
+        <!-- Z-Index levels will be dynamically inserted here -->
+    </div>
+    <div id="paginationControls">
+        <button id="prevPage">Previous</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage">Next</button>
+    </div>
+
+    <!-- Add this new div for the component viewer -->
+    <div id="componentViewer">
+        <span id="closeViewer">&times;</span>
+        <div id="componentHeader"></div>
+        <pre><code id="componentContent" class="language-javascript"></code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-jsx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-tsx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let allData = {};
+        let groupedData = {};
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        let chart = null;
+
+        // WebSocket setup
+        const ws = new WebSocket("ws://localhost:8080/ws");
+        const loadingIndicator = document.getElementById("loadingIndicator");
+
+        ws.onopen = function () {
+            console.log("WebSocket connection established");
+            refreshData();
+        };
+
+        ws.onmessage = function (event) {
+            allData = JSON.parse(event.data);
+            updateDisplay();
+            loadingIndicator.style.display = 'none';
+        };
+
+        ws.onerror = function (error) {
+            console.error("WebSocket error:", error);
+            loadingIndicator.textContent = "Error: Could not connect to server";
+            loadingIndicator.style.display = 'block';
+        };
+
+        ws.onclose = function () {
+            console.log("WebSocket connection closed");
+            loadingIndicator.textContent = "Connection closed. Please refresh the page.";
+            loadingIndicator.style.display = 'block';
+        };
+
+        // Update display function
+        function updateDisplay() {
+            const grouping = document.getElementById("groupingSelect").value;
+            const minZIndex = parseInt(document.getElementById("minZIndex").value);
+            const maxZIndex = parseInt(document.getElementById("maxZIndex").value);
+            const fileTypeFilter = document.getElementById("fileTypeFilter").value.split(',').map(type => type.trim());
+            const sortBy = document.getElementById("sortSelect").value;
+            const sortOrder = document.getElementById("sortOrder").value;
+
+            groupedData = groupData(allData, grouping);
+            const filteredData = filterData(groupedData, minZIndex, maxZIndex, fileTypeFilter);
+            const sortedData = sortData(filteredData, sortBy, sortOrder);
+
+            renderPaginatedData(sortedData);
+            updateVisualization(sortedData);
+        }
+
+        function groupData(data, grouping) {
+            if (grouping === 'none') return data;
+
+            const grouped = {};
+            Object.entries(data).forEach(([zIndex, entry]) => {
+                entry.occurrences.forEach(([filePath, lineNumber]) => {
+                    const key = grouping === 'file' ? filePath : `${filePath}:${lineNumber}`;
+                    if (!grouped[key]) grouped[key] = {};
+                    if (!grouped[key][zIndex]) grouped[key][zIndex] = { occurrences: [] };
+                    grouped[key][zIndex].occurrences.push([filePath, lineNumber]);
+                });
+            });
+            return grouped;
+        }
+
+        function filterData(data, minZIndex, maxZIndex, fileTypes) {
+            const filtered = {};
+            Object.entries(data).forEach(([key, zIndexes]) => {
+                const filteredZIndexes = Object.entries(zIndexes).filter(([zIndex, entry]) => {
+                    const numZIndex = parseInt(zIndex);
+                    return numZIndex >= minZIndex && numZIndex <= maxZIndex &&
+                        (fileTypes.length === 0 || fileTypes.some(type => entry.occurrences[0][0].endsWith(type)));
+                });
+                if (filteredZIndexes.length > 0) {
+                    filtered[key] = Object.fromEntries(filteredZIndexes);
+                }
+            });
+            return filtered;
+        }
+
+        function sortData(data, sortBy, sortOrder) {
+            const sortedEntries = Object.entries(data).sort((a, b) => {
+                let comparison = 0;
+                if (sortBy === 'zIndex') {
+                    const aZIndex = Math.max(...Object.keys(a[1]).map(Number));
+                    const bZIndex = Math.max(...Object.keys(b[1]).map(Number));
+                    comparison = aZIndex - bZIndex;
+                } else if (sortBy === 'file') {
+                    comparison = a[0].localeCompare(b[0]);
+                } else if (sortBy === 'component') {
+                    comparison = a[0].localeCompare(b[0]);
+                }
+                return sortOrder === 'asc' ? comparison : -comparison;
+            });
+            return Object.fromEntries(sortedEntries);
+        }
+
+        function renderPaginatedData(data) {
+            const container = document.getElementById("zIndexContainer");
+            container.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedData = Object.entries(data).slice(startIndex, endIndex);
+
+            paginatedData.forEach(([key, zIndexes]) => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'group';
+                groupDiv.innerHTML = `<h3>${key}</h3>`;
+
+                Object.entries(zIndexes).sort((a, b) => b[0] - a[0]).forEach(([zIndex, entry]) => {
+                    const zLevelDiv = createZLevelElement(zIndex, entry);
+                    groupDiv.appendChild(zLevelDiv);
+                });
+
+                container.appendChild(groupDiv);
+            });
+
+            updatePaginationControls(Object.keys(data).length);
+        }
+
+        function createZLevelElement(zIndex, entry) {
+            const zLevelDiv = document.createElement('div');
+            zLevelDiv.className = 'z-level';
+            zLevelDiv.setAttribute('data-range', getZIndexRange(zIndex));
+
+            const zIndexSpan = document.createElement('div');
+            zIndexSpan.className = 'z-index';
+            zIndexSpan.textContent = `z-index: ${zIndex}`;
+            zLevelDiv.appendChild(zIndexSpan);
+
+            const occurrencesDiv = document.createElement('div');
+            occurrencesDiv.className = 'occurrences';
+
+            entry.occurrences.forEach(([filePath, lineNumber]) => {
+                const componentDiv = createComponentElement(filePath, lineNumber);
+                occurrencesDiv.appendChild(componentDiv);
+            });
+
+            zLevelDiv.appendChild(occurrencesDiv);
+            return zLevelDiv;
+        }
+
+        function getZIndexRange(zIndex) {
+            const numZIndex = parseInt(zIndex);
+            if (numZIndex < 10) return 'low';
+            if (numZIndex < 100) return 'medium';
+            return 'high';
+        }
+
+        function createComponentElement(filePath, lineNumber) {
+            const componentDiv = document.createElement('div');
+            componentDiv.className = 'component';
+
+            const srcIndex = filePath.indexOf('src');
+            const displayPath = srcIndex !== -1 ? filePath.slice(srcIndex) : filePath;
+
+            componentDiv.textContent = `${displayPath}:${lineNumber}`;
+            componentDiv.title = `${filePath}:${lineNumber}`;
+            componentDiv.addEventListener('click', () => renderComponent(filePath, lineNumber));
+            return componentDiv;
+        }
+
+        function updatePaginationControls(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+
+        function updateVisualization(data) {
+            const ctx = document.getElementById('zIndexChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const chartData = prepareChartData(data);
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Z-Index Values'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Occurrences'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function prepareChartData(data) {
+            const zIndexCounts = {};
+            Object.values(data).forEach(zIndexes => {
+                Object.entries(zIndexes).forEach(([zIndex, entry]) => {
+                    if (!zIndexCounts[zIndex]) zIndexCounts[zIndex] = 0;
+                    zIndexCounts[zIndex] += entry.occurrences.length;
+                });
+            });
+
+            const sortedZIndexes = Object.keys(zIndexCounts).sort((a, b) => parseInt(a) - parseInt(b));
+
+            return {
+                labels: sortedZIndexes,
+                datasets: [{
+                    label: 'Occurrences',
+                    data: sortedZIndexes.map(zIndex => zIndexCounts[zIndex]),
+                    backgroundColor: sortedZIndexes.map(zIndex => getColorForZIndex(zIndex)),
+                }]
+            };
+        }
+
+        function getColorForZIndex(zIndex) {
+            const numZIndex = parseInt(zIndex);
+            if (numZIndex < 10) return 'rgba(46, 204, 113, 0.6)';
+            if (numZIndex < 100) return 'rgba(243, 156, 18, 0.6)';
+            return 'rgba(231, 76, 60, 0.6)';
+        }
+
+        // Refresh data function
+        function refreshData() {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send('refresh');
+                loadingIndicator.style.display = 'block';
+            }
+        }
+
+        // Update the renderComponent function
+        function renderComponent(filePath, lineNumber) {
+            const viewer = document.getElementById('componentViewer');
+            const content = document.getElementById('componentContent');
+            const header = document.getElementById('componentHeader');
+
+            content.textContent = 'Loading...';
+            header.textContent = `${filePath}:${lineNumber}`;
+            viewer.style.display = 'block';
+
+            fetch(`/component?file=${encodeURIComponent(filePath)}&line=${lineNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    const lines = data.content.split('\n');
+                    const highlightedLines = lines.map((line, index) => {
+                        const currentLineNumber = lineNumber - (data.z_index_line - 1) + index;
+                        const isHighlighted = index === data.z_index_line - 1;
+                        const lineNumberDisplay = `<span style="color: #999; margin-right: 10px;">${currentLineNumber}</span>`;
+                        if (isHighlighted) {
+                            return `<span class="highlight-line">${lineNumberDisplay}${escapeHtml(line)}</span>`;
+                        }
+                        return `${lineNumberDisplay}${escapeHtml(line)}`;
+                    });
+                    content.innerHTML = highlightedLines.join('\n');
+
+                    const fileExtension = filePath.split('.').pop().toLowerCase();
+                    const language = getLanguageFromExtension(fileExtension);
+                    content.className = `language-${language}`;
+
+                    Prism.highlightElement(content);
+                })
+                .catch(error => {
+                    content.textContent = `Error loading component: ${error.message}`;
+                });
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function getLanguageFromExtension(extension) {
+            switch (extension) {
+                case 'js':
+                    return 'javascript';
+                case 'jsx':
+                    return 'jsx';
+                case 'ts':
+                    return 'typescript';
+                case 'tsx':
+                    return 'tsx';
+                default:
+                    return 'javascript'; // Default to JavaScript
+            }
+        }
+
+        // Search functionality
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const container = document.getElementById('zIndexContainer');
+            const zLevels = container.getElementsByClassName('z-level');
+
+            for (const zLevel of zLevels) {
+                const zIndex = zLevel.querySelector('.z-index').textContent.toLowerCase();
+                const components = zLevel.getElementsByClassName('component');
+                let shouldShow = false;
+
+                if (zIndex.includes(searchTerm)) {
+                    shouldShow = true;
+                    highlightText(zLevel.querySelector('.z-index'), searchTerm);
+                } else {
+                    removeHighlight(zLevel.querySelector('.z-index'));
+                }
+
+                for (const component of components) {
+                    if (component.textContent.toLowerCase().includes(searchTerm)) {
+                        shouldShow = true;
+                        highlightText(component, searchTerm);
+                    } else {
+                        removeHighlight(component);
+                    }
+                }
+
+                zLevel.style.display = shouldShow ? '' : 'none';
+            }
+        }
+
+        function highlightText(element, searchTerm) {
+            const innerHTML = element.innerHTML;
+            const index = innerHTML.toLowerCase().indexOf(searchTerm);
+            if (index >= 0) {
+                element.innerHTML = innerHTML.substring(0, index) +
+                    "<span class='highlight'>" +
+                    innerHTML.substring(index, index + searchTerm.length) +
+                    "</span>" +
+                    innerHTML.substring(index + searchTerm.length);
+            }
+        }
+
+        function removeHighlight(element) {
+            element.innerHTML = element.innerHTML.replace(/<span class='highlight'>/g, '').replace(/<\/span>/g, '');
+        }
+
+        // Event Listeners
+        document.getElementById('refreshButton').addEventListener('click', refreshData);
+        document.getElementById('searchButton').addEventListener('click', performSearch);
+        document.getElementById('searchInput').addEventListener('keyup', function (event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+        document.getElementById('groupingSelect').addEventListener('change', updateDisplay);
+        document.getElementById('minZIndex').addEventListener('change', updateDisplay);
+        document.getElementById('maxZIndex').addEventListener('change', updateDisplay);
+        document.getElementById('fileTypeFilter').addEventListener('change', updateDisplay);
+        document.getElementById('sortSelect').addEventListener('change', updateDisplay);
+        document.getElementById('sortOrder').addEventListener('change', updateDisplay);
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updateDisplay();
+            }
+        });
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const totalPages = Math.ceil(Object.keys(groupedData).length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateDisplay();
+            }
+        });
+        document.getElementById('closeViewer').addEventListener('click', () => {
+            document.getElementById('componentViewer').style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>
