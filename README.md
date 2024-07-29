@@ -1,5 +1,3 @@
-Here is the README file in the format used on GitHub:
-
 **Z-Index Mapper**
 ================
 
